@@ -17,11 +17,12 @@
     "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.7",
     "expo-web-browser": "~58.0.7",
+    "nativewind": "^4.2.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native": "0.88.1",
     "react-native-gesture-handler": "~3.3.0",
-    "react-native-reanimated": "4.7.1",
+    "react-native-reanimated": "^4.7.1",
     "react-native-safe-area-context": "~5.11.1",
     "react-native-screens": "~4.30.1",
     "react-native-web": "~0.21.4",
@@ -29,6 +30,11 @@
   },
   "devDependencies": {
     "@types/react": "~19.3.0",
+    "babel-preset-expo": "^58.0.24",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -37,7 +43,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "doctor": "npx expo-doctor",
+    "fix-deps": "npx expo install --fix",
+    "check": "npm run typecheck && npm run doctor && npx expo install --check && npm run lint"
   },
   "private": true
 }

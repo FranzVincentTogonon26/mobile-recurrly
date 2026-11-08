@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import {
   Tabs,
   TabList,
@@ -24,18 +25,19 @@ export default function AppTabs() {
           <TabTrigger name="home" href="/" asChild>
             <TabButton>Home</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
-          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>
   );
 }
 
+type PressableProps = ComponentProps<typeof Pressable>;
+
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+  // TabTriggerSlotProps declares its ref as `Ref<View>`, which is incompatible
+  // with Pressable's ref type under React Native 0.88's component types.
   return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable {...(props as PressableProps)} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
         type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
         style={styles.tabButtonView}>
