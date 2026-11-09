@@ -3,6 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
+      "@/global.css": [
+        "./global.css"
+      ],
       "@/*": [
         "./src/*"
       ],
