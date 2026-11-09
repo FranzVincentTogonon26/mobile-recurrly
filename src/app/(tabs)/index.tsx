@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function App() {
@@ -6,6 +7,8 @@ export default function App() {
       <Text className="text-xl font-bold text-success">
         Welcome to Nativewind!h
       </Text>
+
+      <Link href={"/subscriptions/spotify"}>Spotify</Link>
     </View>
   );
 }
