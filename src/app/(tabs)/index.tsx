@@ -1,14 +1,15 @@
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+
+import { cssInterop } from "nativewind";
+import { SafeAreaView } from "react-native-safe-area-context";
+cssInterop(SafeAreaView, { className: "style" });
 
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-background">
+    <SafeAreaView className="flex-1 bg-background p-5">
       <Text className="text-xl font-bold text-success">
         Welcome to Nativewind!h
       </Text>
-
-      <Link href={"/subscriptions/spotify"}>Spotify</Link>
-    </View>
+    </SafeAreaView>
   );
 }
