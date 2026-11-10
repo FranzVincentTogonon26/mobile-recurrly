@@ -22,9 +22,6 @@ const AuthScreen = ({ children }: AuthScreenProps) => {
       <StatusBar style="dark" />
 
       <Animated.View entering={FadeIn.duration(240)} style={{ flex: 1 }}>
-        <View pointerEvents="none" className="auth-orb-accent" />
-        <View pointerEvents="none" className="auth-orb-mint" />
-        <View pointerEvents="none" className="auth-orb-warm" />
 
         <KeyboardAvoidingView
           className="auth-screen"
