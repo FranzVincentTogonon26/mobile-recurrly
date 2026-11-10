@@ -1,5 +1,6 @@
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
+import { useUser } from "@clerk/expo";
 import { FlatList, Image, Text, View } from "react-native";
 
 import ListHeading from "@/components/ListHeading";
@@ -19,7 +20,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 cssInterop(SafeAreaView, { className: "style" });
 
 export default function App() {
-  // const { user } = useUser();
+  const { user } = useUser();
   // const posthog = usePostHog();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
@@ -58,11 +59,15 @@ export default function App() {
   // };
 
   // Get user display name: firstName, fullName, or email
-  // const displayName =
-  //   user?.firstName ||
-  //   user?.fullName ||
-  //   user?.emailAddresses[0]?.emailAddress ||
-  //   "User";
+  const displayName =
+    user?.firstName?.trim() ||
+    user?.fullName?.trim() ||
+    user?.primaryEmailAddress?.emailAddress?.split("@")[0] ||
+    HOME_USER.name;
+
+  const avatarSource = user?.hasImage
+    ? { uri: user.imageUrl }
+    : images.avatar;
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
@@ -71,8 +76,8 @@ export default function App() {
           <>
             <View className="home-header">
               <View className="home-user">
-                <Image source={images.avatar} className="home-avatar" />
-                <Text className="home-user-name">{HOME_USER.name}</Text>
+                <Image source={avatarSource} className="home-avatar" />
+                <Text className="home-user-name">{displayName}</Text>
               </View>
 
               {/* <Pressable onPress={() => setIsModalVisible(true)}> */}
