@@ -96,7 +96,7 @@
   }
 
   .upcoming-name {
-    @apply mt-2 text-lg font-sans-bold text-primary;
+    @apply text-lg font-sans-bold text-primary;
   }
 
   .sub-card {
