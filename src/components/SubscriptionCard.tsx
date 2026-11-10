@@ -21,6 +21,10 @@ const SubscriptionCard = ({
   paymentMethod,
   startDate,
   status,
+  onCancelPress,
+  isCancelling,
+  onManagePress,
+  onChangePlanPress,
 }: SubscriptionCardProps) => {
   return (
     <Pressable
@@ -50,11 +54,11 @@ const SubscriptionCard = ({
       </View>
 
       {expanded && (
-        <View className="sub-bdy">
+        <View className="sub-body">
           <View className="sub-details">
             <View className="sub-row">
               <View className="sub-row-copy">
-                <Text className="sub-label">Payment:</Text>
+                <Text className="sub-label">Payment info:</Text>
                 <Text
                   className="sub-value"
                   numberOfLines={1}
@@ -63,60 +67,110 @@ const SubscriptionCard = ({
                   {paymentMethod?.trim() ?? "Not provided"}
                 </Text>
               </View>
+              <Pressable
+                onPress={(e) => {
+                  e.stopPropagation?.();
+                  onManagePress?.();
+                }}
+                className="rounded-full border border-primary px-4 py-1.5 active:bg-primary/10"
+                accessibilityRole="button"
+                accessibilityLabel="Manage payment info"
+              >
+                <Text className="text-sm font-sans-medium text-primary">
+                  Manage
+                </Text>
+              </Pressable>
             </View>
+
             <View className="sub-row">
               <View className="sub-row-copy">
-                <Text className="sub-label">Category:</Text>
+                <Text className="sub-label">Plan details:</Text>
                 <Text
                   className="sub-value"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {(category?.trim() || plan?.trim()) ?? "Not provided"}
+                  {(plan?.trim() || category?.trim()) ?? "Not provided"}
                 </Text>
               </View>
-            </View>
-            <View className="sub-row">
-              <View className="sub-row-copy">
-                <Text className="sub-label">Started:</Text>
-                <Text
-                  className="sub-value"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {startDate
-                    ? formatSubscriptionDateTime(startDate)
-                    : "Not provided"}
+              <Pressable
+                onPress={(e) => {
+                  e.stopPropagation?.();
+                  onChangePlanPress?.();
+                }}
+                className="rounded-full border border-primary px-4 py-1.5 active:bg-primary/10"
+                accessibilityRole="button"
+                accessibilityLabel="Change plan details"
+              >
+                <Text className="text-sm font-sans-medium text-primary">
+                  Change
                 </Text>
-              </View>
+              </Pressable>
             </View>
-            <View className="sub-row">
-              <View className="sub-row-copy">
-                <Text className="sub-label">Renewal date:</Text>
-                <Text
-                  className="sub-value"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {renewalDate
-                    ? formatSubscriptionDateTime(renewalDate)
-                    : "Not provided"}
-                </Text>
+
+            {startDate ? (
+              <View className="sub-row">
+                <View className="sub-row-copy">
+                  <Text className="sub-label">Started:</Text>
+                  <Text
+                    className="sub-value"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {formatSubscriptionDateTime(startDate)}
+                  </Text>
+                </View>
               </View>
-            </View>
-            <View className="sub-row">
-              <View className="sub-row-copy">
-                <Text className="sub-label">Status:</Text>
-                <Text
-                  className="sub-value"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {status ? formatStatusLabel(status) : "Not provided"}
-                </Text>
+            ) : null}
+
+            {renewalDate ? (
+              <View className="sub-row">
+                <View className="sub-row-copy">
+                  <Text className="sub-label">Renewal date:</Text>
+                  <Text
+                    className="sub-value"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {formatSubscriptionDateTime(renewalDate)}
+                  </Text>
+                </View>
               </View>
-            </View>
+            ) : null}
+
+            {status ? (
+              <View className="sub-row">
+                <View className="sub-row-copy">
+                  <Text className="sub-label">Status:</Text>
+                  <Text
+                    className="sub-value"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {formatStatusLabel(status)}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
           </View>
+
+          <Pressable
+            onPress={(e) => {
+              e.stopPropagation?.();
+              onCancelPress?.();
+            }}
+            disabled={isCancelling}
+            className={clsx(
+              "sub-cancel",
+              isCancelling && "sub-cancel-disabled",
+            )}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel subscription"
+          >
+            <Text className="sub-cancel-text">
+              {isCancelling ? "Cancelling..." : "Cancel Subscription"}
+            </Text>
+          </Pressable>
         </View>
       )}
     </Pressable>
