@@ -1,8 +1,9 @@
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import { useUser } from "@clerk/expo";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
@@ -25,22 +26,9 @@ export default function App() {
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
   >(null);
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const { subscriptions, addSubscription } = useSubscriptionStore();
-
-  // Get upcoming subscriptions (active subscriptions with renewal date within next 7 days)
-  // const upcomingSubscriptions = useMemo(() => {
-  //   const now = dayjs();
-  //   const nextWeek = now.add(7, "days");
-  //   return subscriptions
-  //     .filter(
-  //       (sub) =>
-  //         sub.status === "active" &&
-  //         dayjs(sub.renewalDate).isAfter(now) &&
-  //         dayjs(sub.renewalDate).isBefore(nextWeek),
-  //     )
-  //     .sort((a, b) => dayjs(a.renewalDate).diff(dayjs(b.renewalDate)));
-  // }, [subscriptions]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [subscriptions, setSubscriptions] =
+    useState<Subscription[]>(HOME_SUBSCRIPTIONS);
 
   const handleSubscriptionPress = (item: Subscription) => {
     setExpandedSubscriptionId((currentId) =>
@@ -48,15 +36,9 @@ export default function App() {
     );
   };
 
-  // const handleCreateSubscription = (newSubscription: Subscription) => {
-  //   addSubscription(newSubscription);
-  //   posthog.capture("subscription_created", {
-  //     subscription_name: newSubscription.name,
-  //     subscription_price: newSubscription.price,
-  //     subscription_frequency: newSubscription.frequency,
-  //     subscription_category: newSubscription.category,
-  //   });
-  // };
+  const handleCreateSubscription = (newSubscription: Subscription) => {
+    setSubscriptions((prev) => [newSubscription, ...prev]);
+  };
 
   // Get user display name: firstName, fullName, or email
   const displayName =
@@ -80,9 +62,9 @@ export default function App() {
                 <Text className="home-user-name">{displayName}</Text>
               </View>
 
-              {/* <Pressable onPress={() => setIsModalVisible(true)}> */}
+              <Pressable onPress={() => setIsModalVisible(true)}>
               <Image source={icons.add} className="home-add-icon" />
-              {/* </Pressable> */}
+              </Pressable>
             </View>
 
             <View className="home-balance-card">
@@ -120,7 +102,7 @@ export default function App() {
             <ListHeading title="All Subscriptions" />
           </>
         )}
-        data={HOME_SUBSCRIPTIONS}
+        data={subscriptions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <SubscriptionCard
@@ -138,11 +120,11 @@ export default function App() {
         contentContainerClassName="pb-20"
       />
 
-      {/* <CreateSubscriptionModal
+      <CreateSubscriptionModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onSubmit={handleCreateSubscription}
-      /> */}
+      />
     </SafeAreaView>
   );
 }
