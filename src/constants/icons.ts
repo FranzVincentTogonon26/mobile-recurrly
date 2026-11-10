@@ -8,6 +8,7 @@ import dropbox from "@/assets/icons/dropbox.png";
 import figma from "@/assets/icons/figma.png";
 import github from "@/assets/icons/github.png";
 import home from "@/assets/icons/home.png";
+import logo from "@/assets/icons/logo.png";
 import medium from "@/assets/icons/medium.png";
 import menu from "@/assets/icons/menu.png";
 import notion from "@/assets/icons/notion.png";
@@ -26,6 +27,7 @@ export const icons = {
     back,
     menu,
     plus,
+    logo,
     notion,
     dropbox,
     openai,
