@@ -1,9 +1,11 @@
-import { ClerkProvider } from "@clerk/expo";
+import { ClerkProvider, useAuth } from "@clerk/expo";
 import { tokenCache } from "@clerk/expo/token-cache";
+import { colors } from "@/constants/theme";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { View } from "react-native";
 
 import "@/global.css";
 
@@ -20,6 +22,53 @@ if (!publishableKey) {
 
 // Keep the splash screen visible until the fonts are ready.
 SplashScreen.preventAutoHideAsync();
+
+// Unauthenticated cold starts land on the onboarding screen.
+export const unstable_settings = {
+  anchor: "onboarding",
+};
+
+function RootNavigator() {
+  const { isLoaded, isSignedIn } = useAuth({
+    treatPendingAsSignedOut: false,
+  });
+
+  // Wait for Clerk before choosing the first screen so authenticated users
+  // don't briefly see the onboarding flow.
+  if (!isLoaded) {
+    return <View className="flex-1 bg-background" />;
+  }
+
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: colors.background },
+      }}
+    >
+      <Stack.Protected guard={isSignedIn} redirectTo="/onboarding">
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!isSignedIn}>
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            animation: "fade",
+            contentStyle: { backgroundColor: colors.accent },
+          }}
+        />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            animation: "slide_from_right",
+            animationTypeForReplace: "push",
+          }}
+        />
+      </Stack.Protected>
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -43,18 +92,7 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <Stack>
-        {/* The tab group is the Home screen; hide the Stack's "(tabs)" header. */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-            animation: "slide_from_right",
-            animationTypeForReplace: "push",
-          }}
-        />
-      </Stack>
+      <RootNavigator />
     </ClerkProvider>
   );
 }

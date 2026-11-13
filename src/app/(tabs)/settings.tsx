@@ -39,7 +39,7 @@ const Settings = () => {
 
     try {
       await signOut();
-      router.replace("/sign-in");
+      router.replace("/onboarding");
     } catch {
       setSignOutError("We couldn't sign you out. Try again.");
     } finally {

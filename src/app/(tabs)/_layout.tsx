@@ -24,7 +24,7 @@ const TabLayout = () => {
   };
 
   if (!isLoaded) return null;
-  if (!isSignedIn) return <Redirect href="/sign-in" />;
+  if (!isSignedIn) return <Redirect href="/onboarding" />;
 
   return (
     <Tabs
